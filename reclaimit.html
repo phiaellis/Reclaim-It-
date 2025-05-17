@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reclaim It! - Lost and Found</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fc;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007acc;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #007acc;
+    }
+
+    form {
+      margin-bottom: 2rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 0.7rem 1.5rem;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .item-list {
+      margin-top: 2rem;
+    }
+
+    .item {
+      background-color: #f0f0f0;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+
+    .item img {
+      max-width: 100px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🧭 Reclaim It! – School Lost & Found</h1>
+  </header>
+
+  <div class="container">
+    <h2>Report a Lost or Found Item</h2>
+    <form id="itemForm">
+      <select id="type">
+        <option value="Lost">Lost</option>
+        <option value="Found">Found</option>
+      </select>
+
+      <input type="text" id="itemName" placeholder="Item name" required>
+      <textarea id="description" rows="4" placeholder="Describe the item and where it was lost/found..." required></textarea>
+      <input type="text" id="location" placeholder="Location (e.g., Library, Cafeteria)" required>
+      <input type="file" id="image" accept="image/*">
+      <button type="submit">Submit</button>
+    </form>
+
+    <h2>📋 Listed Items</h2>
+    <div class="item-list" id="itemList"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("itemForm");
+    const itemList = document.getElementById("itemList");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const type = document.getElementById("type").value;
+      const name = document.getElementById("itemName").value;
+      const description = document.getElementById("description").value;
+      const location = document.getElementById("location").value;
+      const image = document.getElementById("image").files[0];
+
+      const itemDiv = document.createElement("div");
+      itemDiv.classList.add("item");
+
+      let imageTag = "";
+      if (image) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          imageTag = `<img src="${reader.result}" alt="Item image">`;
+          itemDiv.innerHTML = `
+            ${imageTag}
+            <strong>${type}:</strong> ${name}<br>
+            <em>${description}</em><br>
+            <strong>Location:</strong> ${location}
+          `;
+          itemList.prepend(itemDiv);
+        };
+        reader.readAsDataURL(image);
+      } else {
+        itemDiv.innerHTML = `
+          <strong>${type}:</strong> ${name}<br>
+          <em>${description}</em><br>
+          <strong>Location:</strong> ${location}
+        `;
+        itemList.prepend(itemDiv);
+      }
+
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>
